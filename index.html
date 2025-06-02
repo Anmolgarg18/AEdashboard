@@ -15,7 +15,7 @@
             <div class="text-3xl font-bold text-[#00857C]" id="self-assessment-percentage">0%</div>
             <div class="text-sm text-gray-500" id="self-assessment-count">0/0 completed</div>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+        <div class="w-full bg-gray-200 rounded-fFull h-2.5 mt-3">
             <div class="bg-[#00857C] h-2.5 rounded-full" id="self-assessment-progress" style="width: 0%"></div>
         </div>
     </div>
@@ -1435,7 +1435,7 @@
             case 'in-progress':
                 return { class: 'bg-black text-white px-4 py-[10px]', label: 'In Progress', icon: '⟳' };
             case 'not-started':
-                return { class: 'bg-gray-800 text-white px-4 py-[10px]', label: 'Not Started', icon: '—' };
+                return { class: 'bg-yellow-100 text-gray-500 px-4 py-[10px]', label: 'Not Started', icon: '—' };
             default:
                 return { class: '', label: status, icon: '' };
         }
