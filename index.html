@@ -1536,42 +1536,49 @@
     }
 
     // Filter data based on search and filters
-    function filterData() {
-        const searchText = document.getElementById('search-input').value.toLowerCase();
-        const statusFilter = document.getElementById('status-filter').value;
-        const buFilter = document.getElementById('bu-filter').value;
-        const directorFilter = document.getElementById('director-filter').value;
+   function filterData() {
+    const searchText = document.getElementById('search-input').value.toLowerCase();
+    const statusFilter = document.getElementById('status-filter').value;
+    const buFilter = document.getElementById('bu-filter').value;
+    const directorFilter = document.getElementById('director-filter').value;
 
-        const filtered = aeData.filter(ae => {
-            // Search filter
-            const matchesSearch =
-                ae.AE.toLowerCase().includes(searchText) ||
-                ae.Director.toLowerCase().includes(searchText) ||
-                ae.Business_Unit.toLowerCase().includes(searchText);
+    const filtered = aeData.filter(ae => {
+        // Search filter
+        const matchesSearch =
+            ae.AE.toLowerCase().includes(searchText) ||
+            ae.Director.toLowerCase().includes(searchText) ||
+            ae.Business_Unit.toLowerCase().includes(searchText);
 
-            if(!matchesSearch) return false;
+        if (!matchesSearch) return false;
 
-            // Status filter
-            if(statusFilter !== 'all') {
-                // Check if either selfAssessment or managerAssessment matches the status filter
-                const statuses = [ae.selfAssessment, ae.managerAssessment];
-                // Overall status logic:
-                // Show if any matches the filter
-                if(!statuses.includes(statusFilter)) return false;
-            }
+        // Determine overall status correctly:
+        let overallStatus = 'not-started';
+        const selfComplete = ae.selfAssessment === 'complete';
+        const managerComplete = ae.managerAssessment === 'complete';
 
-            // Business Unit filter
-            if(buFilter !== 'all' && ae.Business_Unit !== buFilter) return false;
+        if (selfComplete && managerComplete) {
+            overallStatus = 'complete';
+        } else if (selfComplete || managerComplete) {
+            overallStatus = 'in-progress';
+        } else {
+            overallStatus = 'not-started';
+        }
 
-            // Director filter
-            if(directorFilter !== 'all' && ae.Director !== directorFilter) return false;
+        // Now apply the status filter properly:
+        if (statusFilter !== 'all' && overallStatus !== statusFilter) return false;
 
-            return true;
-        });
+        // BU filter
+        if (buFilter !== 'all' && ae.Business_Unit !== buFilter) return false;
 
-        renderTable(filtered);
-        updateSummaryCards(filtered);
-    }
+        // Director filter
+        if (directorFilter !== 'all' && ae.Director !== directorFilter) return false;
+
+        return true;
+    });
+
+    renderTable(filtered);
+    updateSummaryCards(filtered);
+}
 
     // Initialize page
     window.addEventListener('DOMContentLoaded', () => {
